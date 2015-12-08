@@ -1,4 +1,4 @@
-/*jslint plusplus: true */
+/*jslint plusplus: true, eqeq: true */
 
 var ViinyDragger = (function () {
 	'use strict';
@@ -9,11 +9,13 @@ var ViinyDragger = (function () {
 		var i = 0;
 		
 		scope = this;
-		scope.options = {
+		scope.defaults = {
 			onStart: function (obj, e) {},
 			onMove: function (obj, e) {},
 			onStop: function (obj, e) {},
-            axis: null
+            axis: null,
+			snapX: 1,
+			snapY: 1
 		};
 
 		scope.elm = document.querySelectorAll(elm);
@@ -25,10 +27,19 @@ var ViinyDragger = (function () {
 		scope.elmY = 0;
 
 		for (i = 0; i < scope.elm.length; i++) {
-            scope.extend(scope.elm[i], opt);
+			scope.extend(scope.elm[i], scope.defaults);
+			
+			scope.extend(scope.elm[i], scope.checkOptions(opt));
 			scope.addMouseDownListener(scope.elm[i]);
 		}
 	}
+	
+	ViinyDragger.prototype.checkOptions = function (opt) {
+		opt.snapX = (opt.snapX === parseInt(opt.snapX, 10)) ? opt.snapX : 1;
+		opt.snapY = (opt.snapY === parseInt(opt.snapY, 10)) ? opt.snapY : 1;
+		
+		return opt;
+	};
 
 	ViinyDragger.prototype.extend = function (opt, props) {
 		var prop = null;
@@ -76,15 +87,25 @@ var ViinyDragger = (function () {
 			scope.activeElm.onMove(scope.activeElm, e);
 		}
         
-        if (scope.activeElm.axis === 'x') {
-            scope.activeElm.style.left = (scope.lastMouseX - scope.elmX) + 'px';
+        if (scope.activeElm.axis == 'x') {
+			scope.activeElm.style.left = (Math.round(
+				(scope.lastMouseX - scope.elmX) / scope.activeElm.snapX
+			) * scope.activeElm.snapX) + 'px';
             
-        } else if (scope.activeElm.axis === 'y') {
-            scope.activeElm.style.top = (scope.lastMouseY - scope.elmY) + 'px';
+        } else if (scope.activeElm.axis == 'y') {
+            scope.activeElm.style.top = (Math.round(
+				(scope.lastMouseY - scope.elmY) / scope.activeElm.snapY
+			) * scope.activeElm.snapY) + 'px';
             
         } else {
-            scope.activeElm.style.left = (scope.lastMouseX - scope.elmX) + 'px';
-            scope.activeElm.style.top = (scope.lastMouseY - scope.elmY) + 'px';
+			
+            scope.activeElm.style.left = (Math.round(
+				(scope.lastMouseX - scope.elmX) / scope.activeElm.snapX
+			) * scope.activeElm.snapX) + 'px';
+			
+            scope.activeElm.style.top = (Math.round(
+				(scope.lastMouseY - scope.elmY) / scope.activeElm.snapY
+			) * scope.activeElm.snapY) + 'px';
         }
 	};
 
