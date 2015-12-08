@@ -13,7 +13,7 @@ var ViinyDragger = (function () {
 			onStart: function (obj, e) {},
 			onMove: function (obj, e) {},
 			onStop: function (obj, e) {},
-            axis: null,
+			axis: null,
 			snapX: 1,
 			snapY: 1
 		};
@@ -88,24 +88,14 @@ var ViinyDragger = (function () {
 		}
         
         if (scope.activeElm.axis == 'x') {
-			scope.activeElm.style.left = (Math.round(
-				(scope.lastMouseX - scope.elmX) / scope.activeElm.snapX
-			) * scope.activeElm.snapX) + 'px';
+			scope.setPosition('x', scope.lastMouseX - scope.elmX);
             
         } else if (scope.activeElm.axis == 'y') {
-            scope.activeElm.style.top = (Math.round(
-				(scope.lastMouseY - scope.elmY) / scope.activeElm.snapY
-			) * scope.activeElm.snapY) + 'px';
+            scope.setPosition('y', scope.lastMouseY - scope.elmY);
             
         } else {
-			
-            scope.activeElm.style.left = (Math.round(
-				(scope.lastMouseX - scope.elmX) / scope.activeElm.snapX
-			) * scope.activeElm.snapX) + 'px';
-			
-            scope.activeElm.style.top = (Math.round(
-				(scope.lastMouseY - scope.elmY) / scope.activeElm.snapY
-			) * scope.activeElm.snapY) + 'px';
+			scope.setPosition('x', scope.lastMouseX - scope.elmX);
+			scope.setPosition('y', scope.lastMouseY - scope.elmY);
         }
 	};
 
@@ -121,6 +111,20 @@ var ViinyDragger = (function () {
 		
 		scope.activeElm.style.zIndex = '';
 		scope.activeElm = null;
+	};
+	
+	ViinyDragger.prototype.setPosition = function (pos, value) {
+		
+		if (pos == 'x') {
+			scope.activeElm.style.left = (Math.round(
+				(value) / scope.activeElm.snapX
+			) * scope.activeElm.snapX) + 'px';
+			
+		} else if (pos == 'y') {
+			scope.activeElm.style.top = (Math.round(
+				(value) / scope.activeElm.snapY
+			) * scope.activeElm.snapY) + 'px';
+		}
 	};
 
 	return ViinyDragger;
