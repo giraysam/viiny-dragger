@@ -66,17 +66,21 @@
 	</div>
 	
 	<script type="text/javascript">
-		var draggable = new ViinyDragger('.draggable', {
+		var draggable = new ViinyDragger('#draggable_obj_3', {
 			onStart: function (obj, e) {
 				console.log(e);
 			},
 			onMove: function (obj, e) {
-				console.log(e);
+                console.log(e);
 			},
 			onStop: function (obj, e) {
 				console.log(e);
-			}
+			},
+            axis: 'x'
 		});
+        
+        var draggable2 = new ViinyDragger('#draggable_obj_2');
+        
 	</script>
 </body>
 </html>

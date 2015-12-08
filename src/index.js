@@ -12,10 +12,9 @@ var ViinyDragger = (function () {
 		scope.options = {
 			onStart: function (obj, e) {},
 			onMove: function (obj, e) {},
-			onStop: function (obj, e) {}
+			onStop: function (obj, e) {},
+            axis: null
 		};
-		
-		scope.extend(scope.options, opt);
 
 		scope.elm = document.querySelectorAll(elm);
 		scope.activeElm = null;
@@ -26,6 +25,7 @@ var ViinyDragger = (function () {
 		scope.elmY = 0;
 
 		for (i = 0; i < scope.elm.length; i++) {
+            scope.extend(scope.elm[i], opt);
 			scope.addMouseDownListener(scope.elm[i]);
 		}
 	}
@@ -50,8 +50,8 @@ var ViinyDragger = (function () {
 	};
 
 	ViinyDragger.prototype.start = function (obj, e) {
-		if (typeof scope.options.onStart === 'function') {
-			scope.options.onStart(obj, e);
+		if (typeof obj.onStart === 'function') {
+			obj.onStart(obj, e);
 		}
 		
 		scope.activeElm = obj;
@@ -72,12 +72,20 @@ var ViinyDragger = (function () {
 			return;
 		}
 		
-		if (typeof scope.options.onMove === 'function') {
-			scope.options.onMove(scope.activeElm, e);
+		if (typeof scope.activeElm.onMove === 'function') {
+			scope.activeElm.onMove(scope.activeElm, e);
 		}
-		
-		scope.activeElm.style.left = (scope.lastMouseX - scope.elmX) + 'px';
-		scope.activeElm.style.top = (scope.lastMouseY - scope.elmY) + 'px';
+        
+        if (scope.activeElm.axis === 'x') {
+            scope.activeElm.style.left = (scope.lastMouseX - scope.elmX) + 'px';
+            
+        } else if (scope.activeElm.axis === 'y') {
+            scope.activeElm.style.top = (scope.lastMouseY - scope.elmY) + 'px';
+            
+        } else {
+            scope.activeElm.style.left = (scope.lastMouseX - scope.elmX) + 'px';
+            scope.activeElm.style.top = (scope.lastMouseY - scope.elmY) + 'px';
+        }
 	};
 
 	ViinyDragger.prototype.stop = function (e) {
@@ -86,8 +94,8 @@ var ViinyDragger = (function () {
 			return;
 		}
 		
-		if (typeof scope.options.onStop === 'function') {
-			scope.options.onStop(scope.activeElm, e);
+		if (typeof scope.activeElm.onStop === 'function') {
+			scope.activeElm.onStop(scope.activeElm, e);
 		}
 		
 		scope.activeElm.style.zIndex = '';
