@@ -1,18 +1,23 @@
 /*jslint plusplus: true, eqeq: true */
 /*globals Document, console*/
 
-var ViinyDragger = (function (window) {
+(function (window) {
 	'use strict';
 
 	var self,
-		position,
+		Position,
 		positionType,
-		positionDecorator,
-		snapDecorator;
+		PositionDecorator,
+		SnapDecorator,
+		ViinyDragger;
 	
-	ViinyDragger = function (elm, options) {
-		
-		var selector, i, _options;
+	ViinyDragger = function(elm, options) {
+		if (!(this instanceof ViinyDragger))
+			return new ViinyDragger.instance(elm, options);
+	};
+	
+	ViinyDragger.instance = function (elm, options) {
+		var selector, i, defaultOptions;
 		
 		self = this;
 		self.activeElm = null;
@@ -22,7 +27,7 @@ var ViinyDragger = (function (window) {
 		self.lastMouseX = 0;
 		self.lastMouseY = 0;
 		
-		self.defaultOptions = {
+		defaultOptions = {
 			snapX: 1,
 			snapY: 1
 		};
@@ -37,8 +42,7 @@ var ViinyDragger = (function (window) {
 		if (selector.length > 0) {
 			for (i = 0; i < selector.length; i++) {
 				this[i] = selector[i];
-				_options = self.extend(self.defaultOptions, options);
-				this[i].options = _options;
+				this[i].options = self.extend(defaultOptions, options);;
 				this[i].onmousedown = function(e) {
 					self.mousedownHandler(e, this);
 					
@@ -48,14 +52,19 @@ var ViinyDragger = (function (window) {
 			
 			this.length = selector.length;
 			
-			positionType = new position();
-			positionType = new snapDecorator(positionType);
+			positionType = new Position();
+			positionType = new SnapDecorator(positionType);
 		}
+		
+		return this;
 	};
 	
-	position = function () { };
+	/**
+	 * Position
+	 */
+	Position = function () { };
 	
-	position.prototype = {
+	Position.prototype = {
 		getX: function () {
 			return (self.lastMouseX - self.activeElmX);
 		},
@@ -65,14 +74,14 @@ var ViinyDragger = (function (window) {
 	};
 	
 	/**
-	 * positionDecorator
+	 * PositionDecorator
 	 * @param position
 	 */
-	positionDecorator = function (position) {
+	PositionDecorator = function (position) {
 		this.position = position;
 	};
 	
-	positionDecorator.prototype = {
+	PositionDecorator.prototype = {
 		getX: function () {
 			return this.position.getX();
 		},
@@ -81,12 +90,16 @@ var ViinyDragger = (function (window) {
 		}
 	};
 	
-	snapDecorator = function (position) {
-		positionDecorator.call(this, position);
+	/**
+	 * SnapDecorator
+	 * @param Position Class
+	 */
+	SnapDecorator = function (position) {
+		PositionDecorator.call(this, position);
 	};
 	
-	snapDecorator.prototype = new positionDecorator();
-	snapDecorator.prototype.getX = function () {
+	SnapDecorator.prototype = new PositionDecorator();
+	SnapDecorator.prototype.getX = function () {
 		var snapX = self.activeElm.options.snapX;
 		
 		return (Math.round(
@@ -94,7 +107,7 @@ var ViinyDragger = (function (window) {
 			) * snapX);
 	};
 	
-	snapDecorator.prototype.getY = function () {
+	SnapDecorator.prototype.getY = function () {
 		var snapY = self.activeElm.options.snapY;
 		
 		return (Math.round(
@@ -109,6 +122,8 @@ var ViinyDragger = (function (window) {
 	 */
 	ViinyDragger.prototype = {
 		mousedownHandler: function (e, obj) {
+			e.preventDefault();
+			
 			this.setActiveElement(obj);
 			
 			obj.style.zIndex = 99999;
@@ -177,6 +192,8 @@ var ViinyDragger = (function (window) {
 		}
 	};
 	
-	return ViinyDragger;
+	ViinyDragger.instance.prototype = ViinyDragger.prototype;
+	
+	window.ViinyDragger = ViinyDragger;
 
 }(window));
