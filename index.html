@@ -69,11 +69,15 @@
 	</div>
 
 	<script type="text/javascript">
-		var a = ViinyDragger('#draggable_obj_2', {
+		ViinyDragger('#draggable_obj_2', {
 			snapX: 50,
-			axisY: false
+			axisY: false,
+			onStop: function (e, obj) {
+				console.log(obj);
+			}
 		});
-		var b = ViinyDragger('#draggable_obj_3', {
+		
+		ViinyDragger('#draggable_obj_3', {
 			axisX: false
 		});
 	</script>
