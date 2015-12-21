@@ -9,6 +9,7 @@
 		positionType,
 		PositionDecorator,
 		SnapDecorator,
+		AxisDecorator,
 		ViinyDragger;
 	
 	ViinyDragger = function(elm, options) {
@@ -29,7 +30,9 @@
 		
 		defaultOptions = {
 			snapX: 1,
-			snapY: 1
+			snapY: 1,
+			axisX: true,
+			axisY: true
 		};
 		
 		if (typeof elm === 'string') {
@@ -54,6 +57,7 @@
 			
 			positionType = new Position();
 			positionType = new SnapDecorator(positionType);
+			positionType = new AxisDecorator(positionType);
 		}
 		
 		return this;
@@ -116,6 +120,35 @@
 	};
 	
 	/**
+	 * AxisDecorator
+	 * @param position Class
+	 */
+	AxisDecorator = function (position) {
+		PositionDecorator.call(this, position);
+	};
+	
+	AxisDecorator.prototype = new PositionDecorator();
+	AxisDecorator.prototype.getX = function () {
+		var axisX = self.activeElm.options.axisX;
+		
+		if (axisX == true) {
+			return this.position.getX();
+		}
+		
+		return null;
+	};
+	
+	AxisDecorator.prototype.getY = function () {
+		var axisY = self.activeElm.options.axisY;
+		
+		if (axisY == true) {
+			return this.position.getY();
+		}
+		
+		return null;
+	};
+	
+	/**
 	 * mousedownHandler
 	 * 
 	 * @param obj
@@ -149,8 +182,13 @@
 			if (self.activeElm === null)
 				return;
 				
-			self.activeElm.style.left = positionType.getX() + 'px';
-			self.activeElm.style.top = positionType.getY() + 'px';
+			if (positionType.getX() != null) {
+				self.activeElm.style.left = positionType.getX() + 'px';
+			}
+			
+			if (positionType.getY() != null) {
+				self.activeElm.style.top = positionType.getY() + 'px';
+			}
 		},
 		
 		/**
