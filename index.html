@@ -69,7 +69,10 @@
 	</div>
 
 	<script type="text/javascript">
-		ViinyDragger.instance('#draggable_obj_2', {
+		var obj = document.getElementById('draggable_obj_2'),
+			obj2 = document.getElementById('draggable_obj_3');
+			
+		ViinyDragger(obj, {
 			snapX: 50,
 			axisY: false,
 			onStop: function (e, obj) {
@@ -77,7 +80,7 @@
 			}
 		});
 		
-		ViinyDragger.instance('#draggable_obj_3', {
+		ViinyDragger(obj2, {
 			axisX: false
 		});
 	</script>

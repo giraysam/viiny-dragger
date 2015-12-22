@@ -1,233 +1,263 @@
 /*jslint plusplus: true, eqeq: true */
 /*globals, console*/
+
 (function (factory) {
-	
-	window['ViinyDragger'] = factory();
-	
-})(function () {
-	'use strict';
-
-	var self,
-		Position,
-		positionType,
-		PositionDecorator,
-		SnapDecorator,
-		AxisDecorator,
-		ViinyDragger;
-
-	ViinyDragger = function (elm, options) {
-		var selector, i, defaultOptions;
-		
-		self = this;
-		self.activeElm = null;
-		self.activeElmX = 0;
-		self.activeElmY = 0;
-
-		self.lastMouseX = 0;
-		self.lastMouseY = 0;
-
-		defaultOptions = {
-			snapX: 1,
-			snapY: 1,
-			axisX: true,
-			axisY: true,
-			onStart: function(e, obj) { },
-			onDrag: function(e, obj) { },
-			onStop: function(e, obj) { }
-		};
-		
-		this.options = this.extend(defaultOptions, options);
-
-		if (typeof elm === 'string') {
-			selector = document.querySelectorAll(elm);
-
-		} else {
-			return elm;
-		}
-
-		if (selector.length > 0) {
-			for (i = 0; i < selector.length; i++) {
-				this[i] = selector[i];
-				this[i].options = self.extend(defaultOptions, options);
-				this[i].onmousedown = function(e) {
-					self.mousedownHandler(e, this);
-
-					return false;
-				};
-			}
-
-			this.length = selector.length;
-
-			positionType = new Position();
-			positionType = new SnapDecorator(positionType);
-			positionType = new AxisDecorator(positionType);
-		}
-
-		return this;
-	};
-
-	/**
-	 * Position
+    'use strict';
+    
+    window['ViinyDragger'] = factory();
+    
+}) (function () {
+    
+    var isDrag = false;
+        
+    /**
+     * @class ViinyDragger
+     * @param {HTMLElement} el
+     * @param {Object} options
+     */
+    function ViinyDragger (el, options) {
+        return new ViinyDragger.instance(el, options);
+    }
+    
+    /**
+     * @class Positions
+     * @param {Object} options
+     */
+    function Positions(options) {
+        this.options = options;
+        this.lastMouseX = 0;
+        this.lastMouseY = 0;
+        this.elmX = 0;
+        this.elmY = 0;
+    }
+    
+    Positions.prototype = {
+        getOptions: function () {
+            return this.options;
+        },
+        setLastMouseX: function (valueX) {
+            this.lastMouseX = valueX;
+        },
+        setLastMouseY: function (valueY) {
+            this.lastMouseY = valueY;
+        },
+        setElmX: function (valueX) {
+            this.elmX = valueX;
+        },
+        setElmY: function (valueY) {
+            this.elmY = valueY;
+        },
+        getX: function() {
+            return (this.lastMouseX - this.elmX);
+        },
+        getY: function() {
+            return (this.lastMouseY - this.elmY);
+        }
+    };
+    
+    /**
+	 * @class PositionDecorator
+	 * @param {Object} Positions
 	 */
-	Position = function () { };
-
-	Position.prototype = {
-		getX: function () {
-			return (self.lastMouseX - self.activeElmX);
-		},
-		getY: function () {
-			return (self.lastMouseY - self.activeElmY);
-		}
-	};
-
-	/**
-	 * PositionDecorator
-	 * @param position
-	 */
-	PositionDecorator = function (position) {
-		this.position = position;
-	};
-
+	function PositionDecorator(Positions) {
+		this.Positions = Positions;
+	}
+	
 	PositionDecorator.prototype = {
+	    getOptions: function () {
+            return this.Positions.getOptions();
+        },
+	    setLastMouseX: function (valueX) {
+            this.Positions.setLastMouseX(valueX);
+        },
+        setLastMouseY: function (valueY) {
+            this.Positions.setLastMouseY(valueY);
+        },
+        setElmX: function (valueX) {
+            this.Positions.setElmX(valueX);
+        },
+        setElmY: function (valueY) {
+            this.Positions.setElmY(valueY);
+        },
 		getX: function () {
-			return this.position.getX();
+			return this.Positions.getX();
 		},
 		getY: function () {
-			return this.position.getY();
+			return this.Positions.getY();
 		}
 	};
-
+	
 	/**
-	 * SnapDecorator
-	 * @param Position Class
+	 * @class SnapDecorator
+	 * @param {Object} Positions
 	 */
-	SnapDecorator = function (position) {
-		PositionDecorator.call(this, position);
-	};
-
+	function SnapDecorator (Positions) {
+		PositionDecorator.call(this, Positions);
+	}
+	
 	SnapDecorator.prototype = new PositionDecorator();
+	
 	SnapDecorator.prototype.getX = function () {
-		var snapX = self.activeElm.options.snapX;
+		var snapX = this.Positions.getOptions().snapX;
 
 		return (Math.round(
-				this.position.getX() / snapX
+				this.Positions.getX() / snapX
 			) * snapX);
 	};
 
 	SnapDecorator.prototype.getY = function () {
-		var snapY = self.activeElm.options.snapY;
+		var snapY = this.Positions.getOptions().snapY;
 
 		return (Math.round(
-				this.position.getY() / snapY
+				this.Positions.getY() / snapY
 			) * snapY);
 	};
-
+	
 	/**
-	 * AxisDecorator
-	 * @param position Class
+	 * @class AxisDecorator
+	 * @param {Object} Positions
 	 */
-	AxisDecorator = function (position) {
-		PositionDecorator.call(this, position);
-	};
+	function AxisDecorator (Positions) {
+		PositionDecorator.call(this, Positions);
+	}
 
 	AxisDecorator.prototype = new PositionDecorator();
+	
 	AxisDecorator.prototype.getX = function () {
-		var axisX = self.activeElm.options.axisX;
+		var axisX = this.Positions.getOptions().axisX;
 
 		if (axisX == true) {
-			return this.position.getX();
+			return this.Positions.getX();
 		}
 
 		return null;
 	};
 
 	AxisDecorator.prototype.getY = function () {
-		var axisY = self.activeElm.options.axisY;
+		var axisY = this.Positions.getOptions().axisY;
 
 		if (axisY == true) {
-			return this.position.getY();
+			return this.Positions.getY();
 		}
 
 		return null;
 	};
-
-	/**
-	 * mousedownHandler
-	 *
-	 * @param obj
-	 */
-	ViinyDragger.prototype = {
-		mousedownHandler: function (e, obj) {
-			
-			e.preventDefault();
-			this.setActiveElement(obj);
-			
-			if ( typeof obj.options.onStart === 'function') {
-				obj.options.onStart(e, obj);
+    
+    /**
+     * @class ViinyDragger.instance
+     * @param {HTMLElement} el
+     * @param {Object} options
+     */
+    ViinyDragger.instance = function (el, options) {
+        var defaultOptions = {
+    			snapX: 1,
+    			snapY: 1,
+    			axisX: true,
+    			axisY: true,
+    			onStart: function(e, obj) { },
+    			onDrag: function(e, obj) { },
+    			onStop: function(e, obj) { }
+    		},
+    		scope = this;
+        
+        this.el = el;
+        this.options = this.extend(defaultOptions, options);
+        
+        this.Positions = new Positions(this.options);
+        this.Positions = new SnapDecorator(this.Positions);
+        this.Positions = new AxisDecorator(this.Positions);
+        
+        this.el.onmousedown = function (e) {
+            scope.mousedownHandler(e);
+        };
+    };
+    
+    ViinyDragger.instance.prototype = {
+        
+        mousedownHandler: function (e) {
+            var event = document.all ? window.event : e,
+                scope = this,
+                lastMouseX = document.all ? window.event.clientX : e.pageX,
+                lastMouseY = document.all ? window.event.clientY : e.pageY;
+                
+            if (event.preventDefault) {
+                event.preventDefault();
+                
+            } else { // if browser is ie
+                document.onselectstart = function () {
+                    return false;
+                };
+            }
+            
+            if ( typeof this.options.onStart === 'function') {
+				this.options.onStart(event, this.el);
 			}
+            
+            isDrag = true;
+            
+            this.el.style.zIndex = 99999;
+            
+            this.Positions.setLastMouseX(lastMouseX);
+			this.Positions.setLastMouseY(lastMouseY);
 			
-			obj.style.zIndex = 99999;
-
-			self.lastMouseX = document.all ? window.event.clientX : e.pageX;
-			self.lastMouseY = document.all ? window.event.clientY : e.pageY;
-
-			self.activeElmX = self.lastMouseX - obj.offsetLeft;
-			self.activeElmY = self.lastMouseY - obj.offsetTop;
-
-			document.onmousemove = this.mousemoveHandler;
-			document.onmouseup = this.mouseupHandler;
+			this.Positions.setElmX(lastMouseX - this.el.offsetLeft);
+			this.Positions.setElmY(lastMouseY - this.el.offsetTop);
+			
+			document.onmousemove = function (e) {
+			    var event = document.all ? window.event : e;
+			    scope.mousemoveHandler(event);
+			};
+			
+			document.onmouseup = function (e) {
+			    var event = document.all ? window.event : e;
+			    scope.mouseupHandler(event);
+			};
 		},
-
+		
 		/**
 		 * mousemoveHandler
 		 * @param event
 		 */
 		mousemoveHandler: function (e) {
-			self.lastMouseX = document.all ? window.event.clientX : e.pageX;
-			self.lastMouseY = document.all ? window.event.clientY : e.pageY;
+		    var lastMouseX = document.all ? window.event.clientX : e.pageX,
+		        lastMouseY = document.all ? window.event.clientY : e.pageY;
+		    
+		    this.Positions.setLastMouseX(lastMouseX);
+		    this.Positions.setLastMouseY(lastMouseY);
 
-			if (self.activeElm === null)
+			if (isDrag === false)
 				return;
-
-			if (positionType.getX() != null) {
-				self.activeElm.style.left = positionType.getX() + 'px';
-			}
-
-			if (positionType.getY() != null) {
-				self.activeElm.style.top = positionType.getY() + 'px';
+			
+			if (this.Positions.getX() !== null) {
+			    this.el.style.left = this.Positions.getX() + 'px';
 			}
 			
-			if ( typeof self.activeElm.options.onDrag === 'function') {
-				self.activeElm.options.onDrag(e, self.activeElm);
+			if (this.Positions.getY() !== null) {
+			    this.el.style.top = this.Positions.getY() + 'px';
+			}
+			
+			if ( typeof this.options.onDrag === 'function') {
+				this.options.onDrag(e, this.el);
 			}
 		},
-
+		
 		/**
 		 * mouseupHandler
 		 * @param event
 		 */
 		mouseupHandler: function (e) {
-			if (self.activeElm === null)
+			if (isDrag === false)
 				return;
 				
-			if ( typeof self.activeElm.options.onStop === 'function') {
-				self.activeElm.options.onStop(e, self.activeElm);
+			if ( typeof this.options.onStop === 'function') {
+				this.options.onStop(e, this.el);
 			}
 
-			self.activeElm.style.zIndex = '';
-			self.activeElm = null;
+			this.el.style.zIndex = '';
+			isDrag = false;
 		},
-
-		/**
-		 * setActiveElement
-		 *
-		 * @param obj
-		 */
-		setActiveElement: function (obj) {
-			self.activeElm = obj;
-		},
-
-		/**
+		
+        /**
 		 * extend
 		 * @param arguments
 		 */
@@ -243,14 +273,7 @@
 
 		    return arguments[0];
 		}
-	};
-
-	// ViinyDragger.instance.prototype = ViinyDragger.prototype;
-	
-	ViinyDragger.instance = function (elm, options) {
-		return new ViinyDragger(elm, options);
-	};
-	
-	return ViinyDragger;
-
+    };
+    
+    return ViinyDragger;
 });
