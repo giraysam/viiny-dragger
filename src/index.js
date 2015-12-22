@@ -1,7 +1,10 @@
 /*jslint plusplus: true, eqeq: true */
 /*globals, console*/
-
-(function (window) {
+(function (factory) {
+	
+	window['ViinyDragger'] = factory();
+	
+})(function () {
 	'use strict';
 
 	var self,
@@ -12,14 +15,9 @@
 		AxisDecorator,
 		ViinyDragger;
 
-	ViinyDragger = function(elm, options) {
-		if (!(this instanceof ViinyDragger))
-			return new ViinyDragger.instance(elm, options);
-	};
-
-	ViinyDragger.instance = function (elm, options) {
+	ViinyDragger = function (elm, options) {
 		var selector, i, defaultOptions;
-
+		
 		self = this;
 		self.activeElm = null;
 		self.activeElmX = 0;
@@ -37,6 +35,8 @@
 			onDrag: function(e, obj) { },
 			onStop: function(e, obj) { }
 		};
+		
+		this.options = this.extend(defaultOptions, options);
 
 		if (typeof elm === 'string') {
 			selector = document.querySelectorAll(elm);
@@ -158,6 +158,7 @@
 	 */
 	ViinyDragger.prototype = {
 		mousedownHandler: function (e, obj) {
+			
 			e.preventDefault();
 			this.setActiveElement(obj);
 			
@@ -244,8 +245,12 @@
 		}
 	};
 
-	ViinyDragger.instance.prototype = ViinyDragger.prototype;
+	// ViinyDragger.instance.prototype = ViinyDragger.prototype;
+	
+	ViinyDragger.instance = function (elm, options) {
+		return new ViinyDragger(elm, options);
+	};
+	
+	return ViinyDragger;
 
-	window.ViinyDragger = ViinyDragger;
-
-}(window));
+});
