@@ -9,15 +9,6 @@
 }) (function () {
     
     var isDrag = false;
-        
-    /**
-     * @class ViinyDragger
-     * @param {HTMLElement} el
-     * @param {Object} options
-     */
-    function ViinyDragger (el, options) {
-        return new ViinyDragger.instance(el, options);
-    }
     
     /**
      * @class Positions
@@ -149,23 +140,22 @@
      * @param {Object} options
      */
     ViinyDragger.instance = function (el, options) {
-        var defaultOptions = {
-    			snapX: 1,
-    			snapY: 1,
-    			axisX: true,
-    			axisY: true,
-    			onStart: function(e, obj) { },
-    			onDrag: function(e, obj) { },
-    			onStop: function(e, obj) { }
-    		},
-    		scope = this;
+        var scope = this;
         
         this.el = el;
-        this.options = this.extend(defaultOptions, options);
+        this.options = options;
         
         this.Positions = new Positions(this.options);
-        this.Positions = new SnapDecorator(this.Positions);
-        this.Positions = new AxisDecorator(this.Positions);
+        
+        // Set SnapDecorator
+        if (this.options.snapX != 0 || this.options.snapY != 0) {
+        	this.Positions = new SnapDecorator(this.Positions);
+        }
+        
+        // Set AxisDecorator
+        if (this.options.axisX == false || this.options.axisY == false) {
+        	this.Positions = new AxisDecorator(this.Positions);
+        }
         
         this.el.onmousedown = function (e) {
             scope.mousedownHandler(e);
@@ -203,11 +193,13 @@
 			this.Positions.setElmX(lastMouseX - this.el.offsetLeft);
 			this.Positions.setElmY(lastMouseY - this.el.offsetTop);
 			
+			// set mousemove event
 			document.onmousemove = function (e) {
 			    var event = document.all ? window.event : e;
 			    scope.mousemoveHandler(event);
 			};
 			
+			// set mouseup event
 			document.onmouseup = function (e) {
 			    var event = document.all ? window.event : e;
 			    scope.mouseupHandler(event);
@@ -255,25 +247,46 @@
 
 			this.el.style.zIndex = '';
 			isDrag = false;
-		},
-		
-        /**
-		 * extend
-		 * @param arguments
-		 */
-		extend: function () {
-
-			for(var i=1; i<arguments.length; i++) {
-		        for(var key in arguments[i]) {
-		            if(arguments[i].hasOwnProperty(key)) {
-		                arguments[0][key] = arguments[i][key];
-		            }
-		        }
-			}
-
-		    return arguments[0];
 		}
     };
+    
+    /**
+	 * extend
+	 * @param arguments
+	 */
+	extend = function () {
+
+		for(var i=1; i<arguments.length; i++) {
+	        for(var key in arguments[i]) {
+	            if(arguments[i].hasOwnProperty(key)) {
+	                arguments[0][key] = arguments[i][key];
+	            }
+	        }
+		}
+
+	    return arguments[0];
+	};
+    
+    /**
+     * @class ViinyDragger
+     * @param {HTMLElement} el
+     * @param {Object} options
+     */
+    function ViinyDragger (el, options) {
+    	var defaultOptions = {
+			snapX: 0,
+			snapY: 0,
+			axisX: true,
+			axisY: true,
+			onStart: function(e, obj) { },
+			onDrag: function(e, obj) { },
+			onStop: function(e, obj) { }
+		};
+		
+		this.options = extend(defaultOptions, options);
+
+        return new ViinyDragger.instance(el, this.options);
+    }
     
     return ViinyDragger;
 });
