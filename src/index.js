@@ -16,33 +16,53 @@
      */
     function Positions(options) {
         this.options = options;
-        this.lastMouseX = 0;
-        this.lastMouseY = 0;
-        this.elmX = 0;
-        this.elmY = 0;
+        this.points = {
+        	elmX: 0,
+        	elmY: 0,
+        	firstMouseX: 0,
+        	firstMouseY: 0,
+        	lastMouseX: 0,
+        	lastMouseY: 0
+        };
     }
     
     Positions.prototype = {
         getOptions: function () {
             return this.options;
         },
-        setLastMouseX: function (valueX) {
-            this.lastMouseX = valueX;
+        setPoints: function (points) {
+        	if (points.elmX)
+        		this.points.elmX = points.elmX;
+        		
+        	if (points.elmY)
+        		this.points.elmY = points.elmY;
+        	
+        	if (points.firstMouseX)
+        		this.points.firstMouseX = points.firstMouseX;
+        		
+        	if (points.firstMouseY)
+        		this.points.firstMouseY = points.firstMouseY;
+        		
+        	if (points.lastMouseX)
+        		this.points.lastMouseX = points.lastMouseX;
+        		
+        	if (points.lastMouseY)
+        		this.points.lastMouseY = points.lastMouseY;
         },
-        setLastMouseY: function (valueY) {
-            this.lastMouseY = valueY;
+        getPoints: function () {
+        	return this.points;
         },
-        setElmX: function (valueX) {
-            this.elmX = valueX;
+        getDistanceX: function () {
+        	return Math.abs(this.points.lastMouseX - this.points.firstMouseX);
         },
-        setElmY: function (valueY) {
-            this.elmY = valueY;
+        getDistanceY: function () {
+        	return Math.abs(this.points.lastMouseY - this.points.firstMouseY);
         },
         getX: function() {
-            return (this.lastMouseX - this.elmX);
+            return (this.points.lastMouseX - this.points.elmX);
         },
         getY: function() {
-            return (this.lastMouseY - this.elmY);
+            return (this.points.lastMouseY - this.points.elmY);
         }
     };
     
@@ -58,17 +78,17 @@
 	    getOptions: function () {
             return this.Positions.getOptions();
         },
-	    setLastMouseX: function (valueX) {
-            this.Positions.setLastMouseX(valueX);
+        setPoints: function (points) {
+        	this.Positions.setPoints(points);
         },
-        setLastMouseY: function (valueY) {
-            this.Positions.setLastMouseY(valueY);
+        getPoints: function () {
+        	return this.Positions.getPoints();
         },
-        setElmX: function (valueX) {
-            this.Positions.setElmX(valueX);
+        getDistanceX: function () {
+        	return this.Positions.getDistanceX();
         },
-        setElmY: function (valueY) {
-            this.Positions.setElmY(valueY);
+        getDistanceY: function () {
+        	return this.Positions.getDistanceY();
         },
 		getX: function () {
 			return this.Positions.getX();
@@ -147,14 +167,14 @@
         
         this.Positions = new Positions(this.options);
         
-        // Set SnapDecorator
-        if (this.options.snapX != 0 || this.options.snapY != 0) {
-        	this.Positions = new SnapDecorator(this.Positions);
-        }
-        
         // Set AxisDecorator
         if (this.options.axisX == false || this.options.axisY == false) {
         	this.Positions = new AxisDecorator(this.Positions);
+        }
+        
+        // Set SnapDecorator
+        if (this.options.snapX != 1 || this.options.snapY != 1) {
+        	this.Positions = new SnapDecorator(this.Positions);
         }
         
         this.el.onmousedown = function (e) {
@@ -167,8 +187,8 @@
         mousedownHandler: function (e) {
             var event = document.all ? window.event : e,
                 scope = this,
-                lastMouseX = document.all ? window.event.clientX : e.pageX,
-                lastMouseY = document.all ? window.event.clientY : e.pageY;
+                mouseX = document.all ? window.event.clientX : e.pageX,
+                mouseY = document.all ? window.event.clientY : e.pageY;
                 
             if (event.preventDefault) {
                 event.preventDefault();
@@ -186,12 +206,13 @@
             isDrag = true;
             
             this.el.style.zIndex = 99999;
-            
-            this.Positions.setLastMouseX(lastMouseX);
-			this.Positions.setLastMouseY(lastMouseY);
 			
-			this.Positions.setElmX(lastMouseX - this.el.offsetLeft);
-			this.Positions.setElmY(lastMouseY - this.el.offsetTop);
+			this.Positions.setPoints({
+				firstMouseX: mouseX,
+				firstMouseY: mouseY,
+				elmX: (mouseX - this.el.offsetLeft),
+				elmY: (mouseY - this.el.offsetTop)
+			});
 			
 			// set mousemove event
 			document.onmousemove = function (e) {
@@ -211,11 +232,13 @@
 		 * @param event
 		 */
 		mousemoveHandler: function (e) {
-		    var lastMouseX = document.all ? window.event.clientX : e.pageX,
-		        lastMouseY = document.all ? window.event.clientY : e.pageY;
+		    var mouseX = document.all ? window.event.clientX : e.pageX,
+		        mouseY = document.all ? window.event.clientY : e.pageY;
 		    
-		    this.Positions.setLastMouseX(lastMouseX);
-		    this.Positions.setLastMouseY(lastMouseY);
+		    this.Positions.setPoints({
+		    	lastMouseX: mouseX,
+		    	lastMouseY: mouseY
+		    });
 
 			if (isDrag === false)
 				return;
@@ -241,6 +264,9 @@
 			if (isDrag === false)
 				return;
 				
+			e['distanceX'] = this.Positions.getDistanceX();
+			e['distanceY'] = this.Positions.getDistanceY();
+				
 			if ( typeof this.options.onStop === 'function') {
 				this.options.onStop(e, this.el);
 			}
@@ -254,7 +280,7 @@
 	 * extend
 	 * @param arguments
 	 */
-	extend = function () {
+	function extend () {
 
 		for(var i=1; i<arguments.length; i++) {
 	        for(var key in arguments[i]) {
@@ -265,7 +291,7 @@
 		}
 
 	    return arguments[0];
-	};
+	}
     
     /**
      * @class ViinyDragger
@@ -274,8 +300,8 @@
      */
     function ViinyDragger (el, options) {
     	var defaultOptions = {
-			snapX: 0,
-			snapY: 0,
+			snapX: 1,
+			snapY: 1,
 			axisX: true,
 			axisY: true,
 			onStart: function(e, obj) { },

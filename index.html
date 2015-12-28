@@ -74,9 +74,8 @@
 			
 		ViinyDragger(obj, {
 			snapX: 50,
-			axisY: false,
 			onStop: function (e, obj) {
-				console.log(obj);
+				console.log(e.distanceY);
 			}
 		});
 		
