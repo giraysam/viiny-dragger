@@ -51,6 +51,11 @@
 			padding: 10px;
 			text-align: center;
 		}
+		
+		.active-box {
+			opacity: 0.5;
+			border: 1px solid #333333;
+		}
 
 	</style>
 </head>
@@ -73,6 +78,7 @@
 			obj2 = document.getElementById('draggable_obj_3');
 			
 		ViinyDragger(obj, {
+			activeClass: 'active-box',
 			snapX: 50,
 			onStop: function (e, obj) {
 				console.log(e.distanceY);
@@ -80,6 +86,7 @@
 		});
 		
 		ViinyDragger(obj2, {
+			activeClass: 'active-box',
 			axisX: false
 		});
 	</script>

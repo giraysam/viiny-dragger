@@ -153,6 +153,36 @@
 
 		return null;
 	};
+	
+	/**
+     * @class ClassManager
+     */
+	function ClassManager () { }
+	
+	ClassManager.prototype = {
+		
+		addClass: function (elm, className) {
+			if(this.hasClass(elm, className)) {
+			  	return true;
+			  }
+			  elm.className += ' ' + className;
+		},
+		
+		hasClass: function (elm, className) {
+			var r = new RegExp('(^| )' + className + '( |$)');
+			
+  			return (elm.className && elm.className.match(r));
+		},
+		
+		removeClass: function (elm, className) {
+			var cls, r;
+			
+			cls = elm.className;
+		  	r = new RegExp('(^| )' + className + '( |$)');
+		  	cls = cls.replace(r,'').replace(/ /g, ' ');
+		  	elm.className = cls;
+		}
+	};
     
     /**
      * @class ViinyDragger.instance
@@ -166,6 +196,7 @@
         this.options = options;
         
         this.Positions = new Positions(this.options);
+        this.ClassManager = new ClassManager();
         
         // Set AxisDecorator
         if (this.options.axisX == false || this.options.axisY == false) {
@@ -185,6 +216,7 @@
     ViinyDragger.instance.prototype = {
         
         mousedownHandler: function (e) {
+        	
             var event = document.all ? window.event : e,
                 scope = this,
                 mouseX = document.all ? window.event.clientX : e.pageX,
@@ -198,6 +230,9 @@
                     return false;
                 };
             }
+            
+            // add activeClass to active object.
+            this.ClassManager.addClass(this.el, this.options.activeClass);
             
             if ( typeof this.options.onStart === 'function') {
 				this.options.onStart(event, this.el);
@@ -263,7 +298,10 @@
 		mouseupHandler: function (e) {
 			if (isDrag === false)
 				return;
-				
+			
+			// remove activeClass
+			this.ClassManager.removeClass(this.el, this.options.activeClass);
+			
 			e['distanceX'] = this.Positions.getDistanceX();
 			e['distanceY'] = this.Positions.getDistanceY();
 				
@@ -300,6 +338,7 @@
      */
     function ViinyDragger (el, options) {
     	var defaultOptions = {
+    		activeClass: '',
 			snapX: 1,
 			snapY: 1,
 			axisX: true,
