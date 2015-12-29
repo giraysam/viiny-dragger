@@ -126,9 +126,14 @@ ViinyDragger(obj2);
 var obj3 = document.getElementById('drag-3'),
     obj4 = document.getElementById('drag-4');
 		
-ViinyDragger(obj3);
+ViinyDragger(obj3, {
+  snapX: 50,
+  snapY: 50
+});
 	
-ViinyDragger(obj4);
+ViinyDragger(obj4, {
+  snapX: 100,
+});
               </code></pre>
             </div>
             <div role="tabpanel" class="tab-pane" id="html-2">
