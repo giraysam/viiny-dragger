@@ -265,6 +265,14 @@ a {
 	word-wrap: break-word;
 }
 
-#drag-2, #drag-4 {
+.active-drag {
+  opacity: 0.7;
+}
+
+#drag-2, #drag-4, #drag-6 {
   left: 200px;
+}
+
+#drag-5 {
+  top: 110px;
 }

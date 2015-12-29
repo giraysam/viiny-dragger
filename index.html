@@ -48,7 +48,9 @@
 var obj = document.getElementById('drag-1'),
     obj2 = document.getElementById('drag-2');
 		
-ViinyDragger(obj);
+ViinyDragger(obj, {
+  activeClass: 'active-drag'
+});
 	
 ViinyDragger(obj2);
               </code></pre>
@@ -82,6 +84,10 @@ ViinyDragger(obj2);
 	color: #FFFFFF;
 	word-wrap: break-word;
 }
+
+.active-drag {
+  opacity: 0.7;
+}
               </code></pre>
             </div>
           </div>
@@ -99,7 +105,9 @@ ViinyDragger(obj2);
               	var obj = document.getElementById('drag-1'),
               			obj2 = document.getElementById('drag-2');
               			
-              	ViinyDragger(obj);
+              	ViinyDragger(obj, {
+              	  activeClass: 'active-drag'
+              	});
               		
               	ViinyDragger(obj2);
             </script>
@@ -132,7 +140,7 @@ ViinyDragger(obj3, {
 });
 	
 ViinyDragger(obj4, {
-  snapX: 100,
+  snapX: 100
 });
               </code></pre>
             </div>
@@ -193,6 +201,92 @@ ViinyDragger(obj4, {
             </script>
         </div>
       </div> <!-- snapping end -->
+      
+      
+      <!-- axis -->
+      <div class="row">
+        <h3>Axis</h3>
+        <div class="col-md-6">
+
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#js-3"role="tab" data-toggle="tab">JS</a></li>
+            <li role="presentation"><a href="#html-3" role="tab" data-toggle="tab">HTML</a></li>
+            <li role="presentation"><a href="#css-3" role="tab" data-toggle="tab">CSS</a></li>
+          </ul>
+        
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="js-3">
+              <pre><code class="javascript">
+var obj5 = document.getElementById('drag-5'),
+    obj6 = document.getElementById('drag-6');
+		
+ViinyDragger(obj5, {
+  axisX: false
+});
+	
+ViinyDragger(obj6, {
+  axisY: false
+});
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="html-3">
+              <pre><code class="html">
+&lt;div id=&quot;drag-5&quot; class=&quot;draggable box&quot;&gt;
+    Dragging only y axis
+&lt;/div&gt;
+
+&lt;div id=&quot;drag-6&quot; class=&quot;draggable box&quot;&gt;
+    Dragging only x axis
+&lt;/div&gt;
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="css-3">
+              <pre><code class="css">
+.draggable {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+.box {
+	width: 100px;
+	height: 100px;
+	padding: 10px;
+	font-size: 12px;
+	text-align: center;
+	background-color: #23527c;
+	color: #FFFFFF;
+	word-wrap: break-word;
+}
+              </code></pre>
+            </div>
+          </div>
+        
+        </div>
+        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
+            <div id="drag-5" class="draggable box">
+                Dragging only y axis
+            </div>
+            
+            <div id="drag-6" class="draggable box">
+                Dragging only x axis
+            </div>
+            <script type="text/javascript">
+              	var obj5 = document.getElementById('drag-5'),
+              			obj6 = document.getElementById('drag-6');
+              			
+              	ViinyDragger(obj5, {
+              	  axisX: false
+              	});
+              		
+              	ViinyDragger(obj6, {
+              	  axisY: false
+              	});
+            </script>
+        </div>
+      </div> <!-- axis end -->
 
     </section>
     
