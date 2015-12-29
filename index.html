@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <title>Viiny-dragger by giraysam</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+    
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/github.min.css">
+    
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
+    
+    <script type="text/javascript" src="https://cdn.rawgit.com/giraysam/viiny-dragger/master/src/index.js"></script>
+    
   </head>
   <body>
     <section class="page-header">
@@ -18,61 +28,169 @@
     </section>
 
     <section class="main-content">
-<h3>
-<a id="pull-requests" class="anchor" href="#pull-requests" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pull Requests</h3>
+      
+      <!-- dragging -->
+      <div class="row">
+        <h3>Dragging</h3>
+        <div class="col-md-6">
 
-<ul>
-<li>
-<a href="https://help.github.com/articles/fork-a-repo/">Fork</a> the project, clone your fork, and configure the remotes:</li>
-</ul>
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#js-1"role="tab" data-toggle="tab">JS</a></li>
+            <li role="presentation"><a href="#html-1" role="tab" data-toggle="tab">HTML</a></li>
+            <li role="presentation"><a href="#css-1" role="tab" data-toggle="tab">CSS</a></li>
+          </ul>
+        
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="js-1">
+              <pre><code class="javascript">
+var obj = document.getElementById('drag-1'),
+    obj2 = document.getElementById('drag-2');
+		
+ViinyDragger(obj);
+	
+ViinyDragger(obj2);
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="html-1">
+              <pre><code class="html">
+&lt;div id=&quot;drag-1&quot; class=&quot;draggable box&quot;&gt;
+    You can drag this
+&lt;/div&gt;
 
-<div class="highlight highlight-source-shell"><pre><span class="pl-c"># Clone your fork of the repo into the current directory</span>
-git clone https://github.com/<span class="pl-k">&lt;</span>your-username<span class="pl-k">&gt;</span>/viiny-dragger.git
-<span class="pl-c"># Navigate to the newly cloned directory</span>
-<span class="pl-c1">cd</span> viiny-dragger
-<span class="pl-c"># Assign the original repo to a remote called "upstream"</span>
-git remote add upstream https://github.com/giraysam/viiny-dragger.git</pre></div>
+&lt;div id=&quot;drag-2&quot; class=&quot;draggable box&quot;&gt;
+    Drag me
+&lt;/div&gt;
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="css-1">
+              <pre><code class="css">
+.draggable {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
 
-<ul>
-<li>If you cloned a while ago, get the latest changes from upstream:</li>
-</ul>
+.box {
+	width: 100px;
+	height: 100px;
+	padding: 10px;
+	font-size: 12px;
+	text-align: center;
+	background-color: #23527c;
+	color: #FFFFFF;
+	word-wrap: break-word;
+}
+              </code></pre>
+            </div>
+          </div>
+        
+        </div>
+        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
+            <div id="drag-1" class="draggable box">
+                You can drag this
+            </div>
+            
+            <div id="drag-2" class="draggable box">
+                Drag me
+            </div>
+            <script type="text/javascript">
+              	var obj = document.getElementById('drag-1'),
+              			obj2 = document.getElementById('drag-2');
+              			
+              	ViinyDragger(obj);
+              		
+              	ViinyDragger(obj2);
+            </script>
+        </div>
+      </div> <!-- dragging end -->
+      
+      
+      <!-- snapping -->
+      <div class="row">
+        <h3>Snapping</h3>
+        <div class="col-md-6">
 
-<div class="highlight highlight-source-shell"><pre>git checkout master
-git pull upstream master</pre></div>
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#js-2"role="tab" data-toggle="tab">JS</a></li>
+            <li role="presentation"><a href="#html-2" role="tab" data-toggle="tab">HTML</a></li>
+            <li role="presentation"><a href="#css-2" role="tab" data-toggle="tab">CSS</a></li>
+          </ul>
+        
+          <!-- Tab panes -->
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="js-2">
+              <pre><code class="javascript">
+var obj3 = document.getElementById('drag-3'),
+    obj4 = document.getElementById('drag-4');
+		
+ViinyDragger(obj3);
+	
+ViinyDragger(obj4);
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="html-2">
+              <pre><code class="html">
+&lt;div id=&quot;drag-3&quot; class=&quot;draggable box&quot;&gt;
+    SnapX: 50, SnapY: 50
+&lt;/div&gt;
 
-<ul>
-<li>Create a new topic branch (off the main project development branch) to contain your feature, change, or fix:</li>
-</ul>
+&lt;div id=&quot;drag-4&quot; class=&quot;draggable box&quot;&gt;
+    SnapX: 100
+&lt;/div&gt;
+              </code></pre>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="css-2">
+              <pre><code class="css">
+.draggable {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
 
-<div class="highlight highlight-source-shell"><pre>git checkout -b <span class="pl-k">&lt;</span>topic-branch-name<span class="pl-k">&gt;</span></pre></div>
-
-<ul>
-<li><p>Commit your changes in logical chunks. Please adhere to these <a href="http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html">git commit message guidelines</a> or your code is unlikely be merged into the main project.
-Use Git's <a href="https://help.github.com/articles/about-git-rebase/">interactive rebase</a> feature to tidy up your commits before making them public.</p></li>
-<li><p>Locally merge (or rebase) the upstream master branch into your topic branch:</p></li>
-</ul>
-
-<div class="highlight highlight-source-shell"><pre>git pull [--rebase] upstream master</pre></div>
-
-<ul>
-<li>Push your topic branch up to your fork:</li>
-</ul>
-
-<div class="highlight highlight-source-shell"><pre>git push origin <span class="pl-k">&lt;</span>topic-branch-name<span class="pl-k">&gt;</span></pre></div>
-
-<ul>
-<li>
-<a href="https://help.github.com/articles/using-pull-requests/">Open a Pull Request</a> with a clear title and description against the master branch.</li>
-</ul>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/giraysam/viiny-dragger">Viiny-dragger</a> is maintained by <a href="https://github.com/giraysam">giraysam</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
+.box {
+	width: 100px;
+	height: 100px;
+	padding: 10px;
+	font-size: 12px;
+	text-align: center;
+	background-color: #23527c;
+	color: #FFFFFF;
+	word-wrap: break-word;
+}
+              </code></pre>
+            </div>
+          </div>
+        
+        </div>
+        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
+            <div id="drag-3" class="draggable box">
+                SnapX: 50, SnapY: 50
+            </div>
+            
+            <div id="drag-4" class="draggable box">
+                SnapX: 100
+            </div>
+            <script type="text/javascript">
+              	var obj3 = document.getElementById('drag-3'),
+              			obj4 = document.getElementById('drag-4');
+              			
+              	ViinyDragger(obj3, {
+              	  snapX: 50,
+              	  snapY: 50
+              	});
+              		
+              	ViinyDragger(obj4, {
+              	  snapX: 100
+              	});
+            </script>
+        </div>
+      </div> <!-- snapping end -->
 
     </section>
-
-  
+    
+    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
