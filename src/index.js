@@ -208,9 +208,14 @@
         	this.Positions = new SnapDecorator(this.Positions);
         }
         
-        this.el.onmousedown = function (e) {
-            scope.mousedownHandler(e);
-        };
+        this.el.addEventListener("mousedown", function(e) {
+        	scope.mousedownHandler(e);
+        }, false);
+        
+        this.el.addEventListener("touchstart", function(e) {
+        	scope.mousedownHandler(e);
+        }, false);
+        
     };
     
     ViinyDragger.instance.prototype = {
@@ -250,14 +255,26 @@
 			});
 			
 			// set mousemove event
-			document.onmousemove = function (e) {
-			    var event = document.all ? window.event : e;
+			document.onmousemove = function(e) {
+				var event = document.all ? window.event : e;
+			    scope.mousemoveHandler(event);
+			};
+			
+			// set touchmove event
+			document.ontouchmove = function(e) {
+				var event = e.changedTouches[0];
 			    scope.mousemoveHandler(event);
 			};
 			
 			// set mouseup event
 			document.onmouseup = function (e) {
 			    var event = document.all ? window.event : e;
+			    scope.mouseupHandler(event);
+			};
+			
+			// set touchend event
+			document.ontouchend = function (e) {
+			    var event = e.changedTouches[0];
 			    scope.mouseupHandler(event);
 			};
 		},
@@ -285,6 +302,9 @@
 			if (this.Positions.getY() !== null) {
 			    this.el.style.top = this.Positions.getY() + 'px';
 			}
+			
+			e['distanceX'] = this.Positions.getDistanceX();
+			e['distanceY'] = this.Positions.getDistanceY();
 			
 			if ( typeof this.options.onDrag === 'function') {
 				this.options.onDrag(e, this.el);
