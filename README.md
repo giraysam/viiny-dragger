@@ -1,5 +1,17 @@
 ## ViinyDragger is a viiny plugin
 
+#### How to install?
+Npm:
+```sh
+npm install viiny-dragger
+```
+
+Bower:
+```sh
+bower install viiny-dragger
+```
+
+
 ### Pull Requests
 * [Fork] the project, clone your fork, and configure the remotes:
 
