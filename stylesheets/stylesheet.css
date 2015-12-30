@@ -247,32 +247,3 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
-
-.draggable {
-	position: absolute;
-	left: 0;
-	top: 0;
-}
-
-.box {
-	width: 100px;
-	height: 100px;
-	padding: 10px;
-	font-size: 12px;
-	text-align: center;
-	background-color: #23527c;
-	color: #FFFFFF;
-	word-wrap: break-word;
-}
-
-.active-drag {
-  opacity: 0.7;
-}
-
-#drag-2, #drag-4, #drag-6 {
-  left: 200px;
-}
-
-#drag-5 {
-  top: 110px;
-}

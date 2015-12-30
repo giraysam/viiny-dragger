@@ -10,19 +10,11 @@
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
     
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/styles/github.min.css">
-    
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.0.0/highlight.min.js"></script>
-    
-    <script type="text/javascript" src="https://cdn.rawgit.com/giraysam/viiny-dragger/master/src/index.js"></script>
-    
   </head>
   <body>
     <section class="page-header">
       <h1 class="project-name">viiny-dragger</h1>
-      <h2 class="project-tagline">vinny-dragger is a drag and drop plugin for javascript.</h2>
+      <h2 class="project-tagline">viiny-dragger is a drag and drop plugin for javascript.</h2>
       <a target="_blank" href="https://github.com/giraysam/viiny-dragger" class="btn">View on GitHub</a>
       <a target="_blank" href="https://github.com/giraysam/viiny-dragger/releases/latest" class="btn">Download Latest Release</a>
     </section>
@@ -30,266 +22,20 @@
     <section class="main-content">
       
       <!-- dragging -->
-      <div class="row">
-        <h3>Dragging</h3>
-        <div class="col-md-6">
-
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#js-1"role="tab" data-toggle="tab">JS</a></li>
-            <li role="presentation"><a href="#html-1" role="tab" data-toggle="tab">HTML</a></li>
-            <li role="presentation"><a href="#css-1" role="tab" data-toggle="tab">CSS</a></li>
-          </ul>
-        
-          <!-- Tab panes -->
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="js-1">
-              <pre><code class="javascript">
-var obj = document.getElementById('drag-1'),
-    obj2 = document.getElementById('drag-2');
-		
-ViinyDragger(obj, {
-  activeClass: 'active-drag'
-});
-	
-ViinyDragger(obj2);
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="html-1">
-              <pre><code class="html">
-&lt;div id=&quot;drag-1&quot; class=&quot;draggable box&quot;&gt;
-    You can drag this
-&lt;/div&gt;
-
-&lt;div id=&quot;drag-2&quot; class=&quot;draggable box&quot;&gt;
-    Drag me
-&lt;/div&gt;
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="css-1">
-              <pre><code class="css">
-.draggable {
-	position: absolute;
-	left: 0;
-	top: 0;
-}
-
-.box {
-	width: 100px;
-	height: 100px;
-	padding: 10px;
-	font-size: 12px;
-	text-align: center;
-	background-color: #23527c;
-	color: #FFFFFF;
-	word-wrap: break-word;
-}
-
-.active-drag {
-  opacity: 0.7;
-}
-              </code></pre>
-            </div>
-          </div>
-        
-        </div>
-        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
-            <div id="drag-1" class="draggable box">
-                You can drag this
-            </div>
-            
-            <div id="drag-2" class="draggable box">
-                Drag me
-            </div>
-            <script type="text/javascript">
-              	var obj = document.getElementById('drag-1'),
-              			obj2 = document.getElementById('drag-2');
-              			
-              	ViinyDragger(obj, {
-              	  activeClass: 'active-drag'
-              	});
-              		
-              	ViinyDragger(obj2);
-            </script>
-        </div>
-      </div> <!-- dragging end -->
-      
+      <h3>Dragging</h3>
+      <iframe width="100%" height="300" src="//jsfiddle.net/giraysam/1h9mwobh/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+      <!-- dragging end -->
       
       <!-- snapping -->
-      <div class="row">
-        <h3>Snapping</h3>
-        <div class="col-md-6">
-
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#js-2"role="tab" data-toggle="tab">JS</a></li>
-            <li role="presentation"><a href="#html-2" role="tab" data-toggle="tab">HTML</a></li>
-            <li role="presentation"><a href="#css-2" role="tab" data-toggle="tab">CSS</a></li>
-          </ul>
-        
-          <!-- Tab panes -->
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="js-2">
-              <pre><code class="javascript">
-var obj3 = document.getElementById('drag-3'),
-    obj4 = document.getElementById('drag-4');
-		
-ViinyDragger(obj3, {
-  snapX: 50,
-  snapY: 50
-});
-	
-ViinyDragger(obj4, {
-  snapX: 100
-});
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="html-2">
-              <pre><code class="html">
-&lt;div id=&quot;drag-3&quot; class=&quot;draggable box&quot;&gt;
-    SnapX: 50, SnapY: 50
-&lt;/div&gt;
-
-&lt;div id=&quot;drag-4&quot; class=&quot;draggable box&quot;&gt;
-    SnapX: 100
-&lt;/div&gt;
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="css-2">
-              <pre><code class="css">
-.draggable {
-	position: absolute;
-	left: 0;
-	top: 0;
-}
-
-.box {
-	width: 100px;
-	height: 100px;
-	padding: 10px;
-	font-size: 12px;
-	text-align: center;
-	background-color: #23527c;
-	color: #FFFFFF;
-	word-wrap: break-word;
-}
-              </code></pre>
-            </div>
-          </div>
-        
-        </div>
-        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
-            <div id="drag-3" class="draggable box">
-                SnapX: 50, SnapY: 50
-            </div>
-            
-            <div id="drag-4" class="draggable box">
-                SnapX: 100
-            </div>
-            <script type="text/javascript">
-              	var obj3 = document.getElementById('drag-3'),
-              			obj4 = document.getElementById('drag-4');
-              			
-              	ViinyDragger(obj3, {
-              	  snapX: 50,
-              	  snapY: 50
-              	});
-              		
-              	ViinyDragger(obj4, {
-              	  snapX: 100
-              	});
-            </script>
-        </div>
-      </div> <!-- snapping end -->
+      <h3>Snapping</h3>
+      <iframe width="100%" height="300" src="//jsfiddle.net/giraysam/ygL3d8Lz/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+      <!-- snapping end -->
       
       
       <!-- axis -->
-      <div class="row">
-        <h3>Axis</h3>
-        <div class="col-md-6">
-
-          <!-- Nav tabs -->
-          <ul class="nav nav-tabs" role="tablist">
-            <li role="presentation" class="active"><a href="#js-3"role="tab" data-toggle="tab">JS</a></li>
-            <li role="presentation"><a href="#html-3" role="tab" data-toggle="tab">HTML</a></li>
-            <li role="presentation"><a href="#css-3" role="tab" data-toggle="tab">CSS</a></li>
-          </ul>
-        
-          <!-- Tab panes -->
-          <div class="tab-content">
-            <div role="tabpanel" class="tab-pane active" id="js-3">
-              <pre><code class="javascript">
-var obj5 = document.getElementById('drag-5'),
-    obj6 = document.getElementById('drag-6');
-		
-ViinyDragger(obj5, {
-  axisX: false
-});
-	
-ViinyDragger(obj6, {
-  axisY: false
-});
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="html-3">
-              <pre><code class="html">
-&lt;div id=&quot;drag-5&quot; class=&quot;draggable box&quot;&gt;
-    Dragging only y axis
-&lt;/div&gt;
-
-&lt;div id=&quot;drag-6&quot; class=&quot;draggable box&quot;&gt;
-    Dragging only x axis
-&lt;/div&gt;
-              </code></pre>
-            </div>
-            <div role="tabpanel" class="tab-pane" id="css-3">
-              <pre><code class="css">
-.draggable {
-	position: absolute;
-	left: 0;
-	top: 0;
-}
-
-.box {
-	width: 100px;
-	height: 100px;
-	padding: 10px;
-	font-size: 12px;
-	text-align: center;
-	background-color: #23527c;
-	color: #FFFFFF;
-	word-wrap: break-word;
-}
-              </code></pre>
-            </div>
-          </div>
-        
-        </div>
-        <div class="col-md-6" style="overflow: hidden; margin-top: 45px; background-color: #f3f6fa; height: 300px;">
-            <div id="drag-5" class="draggable box">
-                Dragging only y axis
-            </div>
-            
-            <div id="drag-6" class="draggable box">
-                Dragging only x axis
-            </div>
-            <script type="text/javascript">
-              	var obj5 = document.getElementById('drag-5'),
-              			obj6 = document.getElementById('drag-6');
-              			
-              	ViinyDragger(obj5, {
-              	  axisX: false
-              	});
-              		
-              	ViinyDragger(obj6, {
-              	  axisY: false
-              	});
-            </script>
-        </div>
-      </div> <!-- axis end -->
-
+      <h3>Axis</h3>
+      <iframe width="100%" height="300" src="//jsfiddle.net/giraysam/b0ngodwr/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+      <!-- axis end -->
     </section>
-    
-    <script>hljs.initHighlightingOnLoad();</script>
   </body>
 </html>
