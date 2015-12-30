@@ -9,13 +9,14 @@
   "main": "src/index.js",
   "moduleType": [],
   "keywords": [
+    "javascript",
     "drag",
     "and",
     "drop",
     "viiny"
   ],
   "license": "MIT",
-  "private": true,
+  "private": false,
   "ignore": [
     "**/.*",
     "node_modules",
