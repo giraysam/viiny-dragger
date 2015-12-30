@@ -11,6 +11,9 @@ Bower:
 bower install viiny-dragger
 ```
 
+### Demo and Examples
+http://giraysam.github.io/viiny-dragger/
+
 
 ### Pull Requests
 * [Fork] the project, clone your fork, and configure the remotes:
