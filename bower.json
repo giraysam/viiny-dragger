@@ -1,0 +1,26 @@
+{
+  "name": "viiny-dragger",
+  "version": "1.2.0",
+  "homepage": "https://github.com/giraysam/viiny-dragger",
+  "authors": [
+    "Giray Sam <gry.sam@gmail.com>"
+  ],
+  "description": "viiny-dragger is a drag and drop plugin for javascript.",
+  "main": "src/index.js",
+  "moduleType": [],
+  "keywords": [
+    "drag",
+    "and",
+    "drop",
+    "viiny"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
