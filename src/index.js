@@ -208,13 +208,14 @@
         	this.Positions = new SnapDecorator(this.Positions);
         }
         
-        this.el.addEventListener("mousedown", function(e) {
+        this.el.onmousedown = function(e) {
         	scope.mousedownHandler(e);
-        }, false);
+        };
         
-        this.el.addEventListener("touchstart", function(e) {
-        	scope.mousedownHandler(e);
-        }, false);
+        this.el.ontouchstart = function(e) {
+        	e.preventDefault();
+        	scope.mousedownHandler(e.changedTouches[0]);
+        };
         
     };
     
@@ -226,7 +227,7 @@
                 scope = this,
                 mouseX = document.all ? window.event.clientX : e.pageX,
                 mouseY = document.all ? window.event.clientY : e.pageY;
-                
+            
             if (event.preventDefault) {
                 event.preventDefault();
                 
