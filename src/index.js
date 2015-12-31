@@ -3,8 +3,17 @@
 
 (function (factory) {
     'use strict';
+    window.viiny = window.viiny || {};
     
-    window['ViinyDragger'] = factory();
+    if (typeof define === "function" && define.amd) {
+		define(factory);
+	}
+	else if (typeof module != "undefined" && typeof module.exports != "undefined") {
+		module.exports = factory();
+	}
+	else {
+		window.viiny.dragger = factory();
+	}
     
 }) (function () {
     
