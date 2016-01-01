@@ -1,11 +1,11 @@
 /*jslint plusplus: true, eqeq: true */
 /*globals, console*/
 
-(function (factory) {
-    'use strict';
-    window.viiny = window.viiny || {};
-    
-    if (typeof define === "function" && define.amd) {
+(function(factory) {
+	'use strict';
+	window.viiny = window.viiny || {};
+
+	if (typeof define === "function" && define.amd) {
 		define(factory);
 	}
 	else if (typeof module != "undefined" && typeof module.exports != "undefined") {
@@ -14,136 +14,136 @@
 	else {
 		window.viiny.dragger = factory();
 	}
-    
-}) (function () {
-    
-    var isDrag = false;
-    
-    /**
-     * @class Positions
-     * @param {Object} options
-     */
-    function Positions(options) {
-        this.options = options;
-        this.points = {
-        	elmX: 0,
-        	elmY: 0,
-        	firstMouseX: 0,
-        	firstMouseY: 0,
-        	lastMouseX: 0,
-        	lastMouseY: 0
-        };
-    }
-    
-    Positions.prototype = {
-        getOptions: function () {
-            return this.options;
-        },
-        setPoints: function (points) {
-        	if (points.elmX)
-        		this.points.elmX = points.elmX;
-        		
-        	if (points.elmY)
-        		this.points.elmY = points.elmY;
-        	
-        	if (points.firstMouseX)
-        		this.points.firstMouseX = points.firstMouseX;
-        		
-        	if (points.firstMouseY)
-        		this.points.firstMouseY = points.firstMouseY;
-        		
-        	if (points.lastMouseX)
-        		this.points.lastMouseX = points.lastMouseX;
-        		
-        	if (points.lastMouseY)
-        		this.points.lastMouseY = points.lastMouseY;
-        },
-        getPoints: function () {
-        	return this.points;
-        },
-        getDistanceX: function () {
-        	return Math.abs(this.points.lastMouseX - this.points.firstMouseX);
-        },
-        getDistanceY: function () {
-        	return Math.abs(this.points.lastMouseY - this.points.firstMouseY);
-        },
-        getX: function() {
-            return (this.points.lastMouseX - this.points.elmX);
-        },
-        getY: function() {
-            return (this.points.lastMouseY - this.points.elmY);
-        }
-    };
-    
-    /**
+
+})(function() {
+
+	var isDrag = false;
+
+	/**
+	 * @class Positions
+	 * @param {Object} options
+	 */
+	function Positions(options) {
+		this.options = options;
+		this.points = {
+			elmX: 0,
+			elmY: 0,
+			firstMouseX: 0,
+			firstMouseY: 0,
+			lastMouseX: 0,
+			lastMouseY: 0
+		};
+	}
+
+	Positions.prototype = {
+		getOptions: function() {
+			return this.options;
+		},
+		setPoints: function(points) {
+			if (points.elmX)
+				this.points.elmX = points.elmX;
+
+			if (points.elmY)
+				this.points.elmY = points.elmY;
+
+			if (points.firstMouseX)
+				this.points.firstMouseX = points.firstMouseX;
+
+			if (points.firstMouseY)
+				this.points.firstMouseY = points.firstMouseY;
+
+			if (points.lastMouseX)
+				this.points.lastMouseX = points.lastMouseX;
+
+			if (points.lastMouseY)
+				this.points.lastMouseY = points.lastMouseY;
+		},
+		getPoints: function() {
+			return this.points;
+		},
+		getDistanceX: function() {
+			return Math.abs(this.points.lastMouseX - this.points.firstMouseX);
+		},
+		getDistanceY: function() {
+			return Math.abs(this.points.lastMouseY - this.points.firstMouseY);
+		},
+		getX: function() {
+			return (this.points.lastMouseX - this.points.elmX);
+		},
+		getY: function() {
+			return (this.points.lastMouseY - this.points.elmY);
+		}
+	};
+
+	/**
 	 * @class PositionDecorator
 	 * @param {Object} Positions
 	 */
 	function PositionDecorator(Positions) {
 		this.Positions = Positions;
 	}
-	
+
 	PositionDecorator.prototype = {
-	    getOptions: function () {
-            return this.Positions.getOptions();
-        },
-        setPoints: function (points) {
-        	this.Positions.setPoints(points);
-        },
-        getPoints: function () {
-        	return this.Positions.getPoints();
-        },
-        getDistanceX: function () {
-        	return this.Positions.getDistanceX();
-        },
-        getDistanceY: function () {
-        	return this.Positions.getDistanceY();
-        },
-		getX: function () {
+		getOptions: function() {
+			return this.Positions.getOptions();
+		},
+		setPoints: function(points) {
+			this.Positions.setPoints(points);
+		},
+		getPoints: function() {
+			return this.Positions.getPoints();
+		},
+		getDistanceX: function() {
+			return this.Positions.getDistanceX();
+		},
+		getDistanceY: function() {
+			return this.Positions.getDistanceY();
+		},
+		getX: function() {
 			return this.Positions.getX();
 		},
-		getY: function () {
+		getY: function() {
 			return this.Positions.getY();
 		}
 	};
-	
+
 	/**
 	 * @class SnapDecorator
 	 * @param {Object} Positions
 	 */
-	function SnapDecorator (Positions) {
+	function SnapDecorator(Positions) {
 		PositionDecorator.call(this, Positions);
 	}
-	
+
 	SnapDecorator.prototype = new PositionDecorator();
-	
-	SnapDecorator.prototype.getX = function () {
+
+	SnapDecorator.prototype.getX = function() {
 		var snapX = this.Positions.getOptions().snapX;
 
 		return (Math.round(
-				this.Positions.getX() / snapX
-			) * snapX);
+			this.Positions.getX() / snapX
+		) * snapX);
 	};
 
-	SnapDecorator.prototype.getY = function () {
+	SnapDecorator.prototype.getY = function() {
 		var snapY = this.Positions.getOptions().snapY;
 
 		return (Math.round(
-				this.Positions.getY() / snapY
-			) * snapY);
+			this.Positions.getY() / snapY
+		) * snapY);
 	};
-	
+
 	/**
 	 * @class AxisDecorator
 	 * @param {Object} Positions
 	 */
-	function AxisDecorator (Positions) {
+	function AxisDecorator(Positions) {
 		PositionDecorator.call(this, Positions);
 	}
 
 	AxisDecorator.prototype = new PositionDecorator();
-	
-	AxisDecorator.prototype.getX = function () {
+
+	AxisDecorator.prototype.getX = function() {
 		var axisX = this.Positions.getOptions().axisX;
 
 		if (axisX == true) {
@@ -153,7 +153,7 @@
 		return null;
 	};
 
-	AxisDecorator.prototype.getY = function () {
+	AxisDecorator.prototype.getY = function() {
 		var axisY = this.Positions.getOptions().axisY;
 
 		if (axisY == true) {
@@ -162,226 +162,251 @@
 
 		return null;
 	};
-	
+
 	/**
-     * @class ClassManager
-     */
-	function ClassManager () { }
-	
+	 * @class ClassManager
+	 */
+	function ClassManager() {}
+
 	ClassManager.prototype = {
-		
-		addClass: function (elm, className) {
-			if(this.hasClass(elm, className)) {
-			  	return true;
-			  }
-			  elm.className += ' ' + className;
+
+		addClass: function(elm, className) {
+			if (this.hasClass(elm, className)) {
+				return true;
+			}
+			elm.className += ' ' + className;
 		},
-		
-		hasClass: function (elm, className) {
+
+		hasClass: function(elm, className) {
 			var r = new RegExp('(^| )' + className + '( |$)');
-			
-  			return (elm.className && elm.className.match(r));
+
+			return (elm.className && elm.className.match(r));
 		},
-		
-		removeClass: function (elm, className) {
+
+		removeClass: function(elm, className) {
 			var cls, r;
-			
+
 			cls = elm.className;
-		  	r = new RegExp('(^| )' + className + '( |$)');
-		  	cls = cls.replace(r,'').replace(/ /g, ' ');
-		  	elm.className = cls;
+			r = new RegExp('(^| )' + className + '( |$)');
+			cls = cls.replace(r, '').replace(/ /g, ' ');
+			elm.className = cls;
 		}
 	};
-    
-    /**
-     * @class ViinyDragger.instance
-     * @param {HTMLElement} el
-     * @param {Object} options
-     */
-    ViinyDragger.instance = function (el, options) {
-        var scope = this;
-        
-        this.el = el;
-        this.options = options;
-        
-        this.Positions = new Positions(this.options);
-        this.ClassManager = new ClassManager();
-        
-        // Set AxisDecorator
-        if (this.options.axisX == false || this.options.axisY == false) {
-        	this.Positions = new AxisDecorator(this.Positions);
-        }
-        
-        // Set SnapDecorator
-        if (this.options.snapX != 1 || this.options.snapY != 1) {
-        	this.Positions = new SnapDecorator(this.Positions);
-        }
-        
-        this.el.onmousedown = function(e) {
-        	scope.mousedownHandler(e);
-        };
-        
-        this.el.ontouchstart = function(e) {
-        	e.preventDefault();
-        	scope.mousedownHandler(e.changedTouches[0]);
-        };
-        
-    };
-    
-    ViinyDragger.instance.prototype = {
-        
-        mousedownHandler: function (e) {
-        	
-            var event = document.all ? window.event : e,
-                scope = this,
-                mouseX = document.all ? window.event.clientX : e.pageX,
-                mouseY = document.all ? window.event.clientY : e.pageY;
-            
-            if (event.preventDefault) {
-                event.preventDefault();
-                
-            } else { // if browser is ie
-                document.onselectstart = function () {
-                    return false;
-                };
-            }
-            
-            // add activeClass to active object.
-            this.ClassManager.addClass(this.el, this.options.activeClass);
-            
-            if ( typeof this.options.onStart === 'function') {
+
+	/**
+	 * @class ViinyDragger.instance
+	 * @param {HTMLElement} el
+	 * @param {Object} options
+	 */
+	ViinyDragger.instance = function(el, options) {
+		var scope = this;
+
+		this.el = el;
+		this.options = options;
+
+		this.el.style.position = "absolute";
+
+		this.Positions = new Positions(this.options);
+		this.ClassManager = new ClassManager();
+
+		// Set AxisDecorator
+		if (this.options.axisX == false || this.options.axisY == false) {
+			this.Positions = new AxisDecorator(this.Positions);
+		}
+
+		// Set SnapDecorator
+		if (this.options.snapX != 1 || this.options.snapY != 1) {
+			this.Positions = new SnapDecorator(this.Positions);
+		}
+
+		this.el.onmousedown = function(e) {
+			scope.mousedownHandler(e);
+		};
+
+		this.el.ontouchstart = function(e) {
+			e.preventDefault();
+			scope.mousedownHandler(e.changedTouches[0]);
+		};
+
+	};
+
+	ViinyDragger.instance.prototype = {
+
+		mousedownHandler: function(e) {
+
+			var event = document.all ? window.event : e,
+				scope = this,
+				mouseX = document.all ? window.event.clientX : e.pageX,
+				mouseY = document.all ? window.event.clientY : e.pageY;
+
+			if (event.preventDefault) {
+				event.preventDefault();
+
+			}
+			else { // if browser is ie
+				document.onselectstart = function() {
+					return false;
+				};
+			}
+
+			// add activeClass to active object.
+			this.ClassManager.addClass(this.el, this.options.activeClass);
+
+			if (typeof this.options.onStart === 'function') {
 				this.options.onStart(event, this.el);
 			}
-            
-            isDrag = true;
-            
-            this.el.style.zIndex = 99999;
-			
+
+			isDrag = true;
+
+			this.el.style.zIndex = 99999;
+
 			this.Positions.setPoints({
 				firstMouseX: mouseX,
 				firstMouseY: mouseY,
 				elmX: (mouseX - this.el.offsetLeft),
 				elmY: (mouseY - this.el.offsetTop)
 			});
-			
+
 			// set mousemove event
 			document.onmousemove = function(e) {
 				var event = document.all ? window.event : e;
-			    scope.mousemoveHandler(event);
+				scope.mousemoveHandler(event);
 			};
-			
+
 			// set touchmove event
 			document.ontouchmove = function(e) {
 				var event = e.changedTouches[0];
-			    scope.mousemoveHandler(event);
+				scope.mousemoveHandler(event);
 			};
-			
+
 			// set mouseup event
-			document.onmouseup = function (e) {
-			    var event = document.all ? window.event : e;
-			    scope.mouseupHandler(event);
+			document.onmouseup = function(e) {
+				var event = document.all ? window.event : e;
+				scope.mouseupHandler(event);
 			};
-			
+
 			// set touchend event
-			document.ontouchend = function (e) {
-			    var event = e.changedTouches[0];
-			    scope.mouseupHandler(event);
+			document.ontouchend = function(e) {
+				var event = e.changedTouches[0];
+				scope.mouseupHandler(event);
 			};
 		},
-		
+
 		/**
 		 * mousemoveHandler
 		 * @param event
 		 */
-		mousemoveHandler: function (e) {
-		    var mouseX = document.all ? window.event.clientX : e.pageX,
-		        mouseY = document.all ? window.event.clientY : e.pageY;
-		    
-		    this.Positions.setPoints({
-		    	lastMouseX: mouseX,
-		    	lastMouseY: mouseY
-		    });
+		mousemoveHandler: function(e) {
+			var mouseX = document.all ? window.event.clientX : e.pageX,
+				mouseY = document.all ? window.event.clientY : e.pageY;
+
+			this.Positions.setPoints({
+				lastMouseX: mouseX,
+				lastMouseY: mouseY
+			});
 
 			if (isDrag === false)
 				return;
-			
+
 			if (this.Positions.getX() !== null) {
-			    this.el.style.left = this.Positions.getX() + 'px';
+				this.el.style.left = this.Positions.getX() + 'px';
 			}
-			
+
 			if (this.Positions.getY() !== null) {
-			    this.el.style.top = this.Positions.getY() + 'px';
+				this.el.style.top = this.Positions.getY() + 'px';
 			}
-			
+
 			e['distanceX'] = this.Positions.getDistanceX();
 			e['distanceY'] = this.Positions.getDistanceY();
-			
-			if ( typeof this.options.onDrag === 'function') {
+
+			if (typeof this.options.onDrag === 'function') {
 				this.options.onDrag(e, this.el);
 			}
 		},
-		
+
 		/**
 		 * mouseupHandler
 		 * @param event
 		 */
-		mouseupHandler: function (e) {
+		mouseupHandler: function(e) {
+			
+			var documentWidth = window.innerWidth || document.body.clientWidth,
+				documentHeight = window.innerHeight || document.body.clientHeight;
+				
 			if (isDrag === false)
 				return;
-			
+				
 			// remove activeClass
 			this.ClassManager.removeClass(this.el, this.options.activeClass);
-			
+
 			e['distanceX'] = this.Positions.getDistanceX();
 			e['distanceY'] = this.Positions.getDistanceY();
-				
-			if ( typeof this.options.onStop === 'function') {
+
+			if (typeof this.options.onStop === 'function') {
 				this.options.onStop(e, this.el);
+			}
+			
+			// restrict document width
+			if (this.Positions.getX() < 0) {
+				this.el.style.left = '0px';
+			}
+			else if (this.Positions.getX() >
+				(documentWidth - this.el.offsetWidth)) {
+				this.el.style.left = (documentWidth - this.el.offsetWidth) + 'px';
+			}
+
+			// restrict document height
+			if (this.Positions.getY() < 0) {
+				this.el.style.top = '0px';
+			}
+			else if (this.Positions.getY() >
+				(documentHeight - this.el.offsetHeight)) {
+				this.el.style.top = (documentHeight - this.el.offsetHeight) + 'px';
 			}
 
 			this.el.style.zIndex = '';
 			isDrag = false;
 		}
-    };
-    
-    /**
+	};
+
+	/**
 	 * extend
 	 * @param arguments
 	 */
-	function extend () {
+	function extend() {
 
-		for(var i=1; i<arguments.length; i++) {
-	        for(var key in arguments[i]) {
-	            if(arguments[i].hasOwnProperty(key)) {
-	                arguments[0][key] = arguments[i][key];
-	            }
-	        }
+		for (var i = 1; i < arguments.length; i++) {
+			for (var key in arguments[i]) {
+				if (arguments[i].hasOwnProperty(key)) {
+					arguments[0][key] = arguments[i][key];
+				}
+			}
 		}
 
-	    return arguments[0];
+		return arguments[0];
 	}
-    
-    /**
-     * @class ViinyDragger
-     * @param {HTMLElement} el
-     * @param {Object} options
-     */
-    function ViinyDragger (el, options) {
-    	var defaultOptions = {
-    		activeClass: '',
+
+	/**
+	 * @class ViinyDragger
+	 * @param {HTMLElement} el
+	 * @param {Object} options
+	 */
+	function ViinyDragger(el, options) {
+		var defaultOptions = {
+			activeClass: '',
 			snapX: 1,
 			snapY: 1,
 			axisX: true,
 			axisY: true,
-			onStart: function(e, obj) { },
-			onDrag: function(e, obj) { },
-			onStop: function(e, obj) { }
+			onStart: function(e, obj) {},
+			onDrag: function(e, obj) {},
+			onStop: function(e, obj) {}
 		};
-		
+
 		this.options = extend(defaultOptions, options);
 
-        return new ViinyDragger.instance(el, this.options);
-    }
-    
-    return ViinyDragger;
+		return new ViinyDragger.instance(el, this.options);
+	}
+
+	return ViinyDragger;
 });
