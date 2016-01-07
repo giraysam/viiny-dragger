@@ -75,6 +75,7 @@
 		}
 	};
 
+	/* =========================== Decorators ============================== */
 	/**
 	 * @class PositionDecorator
 	 * @param {Object} Positions
@@ -164,6 +165,60 @@
 	};
 
 	/**
+	 * @class RestrictionDecorator
+	 * @param {Object} Positions
+	 */
+	function RestrictionDecorator(Positions, el, restrictEl) {
+		PositionDecorator.call(this, Positions);
+
+		restrictEl = restrictEl || 'document';
+		this.el = el;
+
+		if (restrictEl == 'document') {
+			this.restrictWidth = window.innerWidth || document.body.clientWidth;
+			this.restrictHeight = window.innerHeight || document.body.clientHeight;
+		}
+		else {
+			if (typeof restrictEl != 'object')
+				throw new Error('Restrict must be object: ' +
+					'document.getElementById("obj_id")');
+
+			restrictEl.style.position = 'relative';
+
+			this.restrictWidth = restrictEl.offsetWidth;
+			this.restrictHeight = restrictEl.offsetHeight;
+		}
+	}
+
+	RestrictionDecorator.prototype = new PositionDecorator();
+
+	RestrictionDecorator.prototype.getX = function() {
+		if (this.Positions.getX() < 0) {
+			return 0;
+		}
+		else if (this.Positions.getX() >
+			(this.restrictWidth - this.el.offsetWidth)) {
+			return (this.restrictWidth - this.el.offsetWidth);
+		}
+
+		return this.Positions.getX();
+	};
+
+	RestrictionDecorator.prototype.getY = function() {
+		if (this.Positions.getY() < 0) {
+			return 0;
+		}
+		else if (this.Positions.getY() >
+			(this.restrictHeight - this.el.offsetHeight)) {
+			return (this.restrictHeight - this.el.offsetHeight);
+		}
+
+		return this.Positions.getY();
+	};
+
+	/* ========================= Decorators End ============================ */
+
+	/**
 	 * @class ClassManager
 	 */
 	function ClassManager() {}
@@ -218,6 +273,12 @@
 		if (this.options.snapX != 1 || this.options.snapY != 1) {
 			this.Positions = new SnapDecorator(this.Positions);
 		}
+
+		// set RestrictionDecorator
+		this.Positions = new RestrictionDecorator(
+			this.Positions,
+			this.el, this.options.restrict
+		);
 
 		this.el.onmousedown = function(e) {
 			scope.mousedownHandler(e);
@@ -329,13 +390,9 @@
 		 * @param event
 		 */
 		mouseupHandler: function(e) {
-			
-			var documentWidth = window.innerWidth || document.body.clientWidth,
-				documentHeight = window.innerHeight || document.body.clientHeight;
-				
 			if (isDrag === false)
 				return;
-				
+
 			// remove activeClass
 			this.ClassManager.removeClass(this.el, this.options.activeClass);
 
@@ -344,24 +401,6 @@
 
 			if (typeof this.options.onStop === 'function') {
 				this.options.onStop(e, this.el);
-			}
-			
-			// restrict document width
-			if (this.Positions.getX() < 0) {
-				this.el.style.left = '0px';
-			}
-			else if (this.Positions.getX() >
-				(documentWidth - this.el.offsetWidth)) {
-				this.el.style.left = (documentWidth - this.el.offsetWidth) + 'px';
-			}
-
-			// restrict document height
-			if (this.Positions.getY() < 0) {
-				this.el.style.top = '0px';
-			}
-			else if (this.Positions.getY() >
-				(documentHeight - this.el.offsetHeight)) {
-				this.el.style.top = (documentHeight - this.el.offsetHeight) + 'px';
 			}
 
 			this.el.style.zIndex = '';
@@ -398,6 +437,7 @@
 			snapY: 1,
 			axisX: true,
 			axisY: true,
+			restrict: 'document',
 			onStart: function(e, obj) {},
 			onDrag: function(e, obj) {},
 			onStop: function(e, obj) {}
